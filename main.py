@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 #mean square Error
 def computeError(b, m, points):
@@ -39,20 +40,41 @@ def gradientStep(currentB, currentM, Points, learning_Rate):
 
     return [newB, newM]
 
+def graph(points, m, b):
+    x = points[:, 0]
+    y = points[:, 1]
+    yPoints = []
+
+    
+    plt.xlabel('Hours Studied')
+    plt.ylabel('Final Grade')
+    plt.grid(True)
+
+
+    plt.scatter(x,y,s=15,c='blue',alpha=0.5) #graph points
+    for xVal in x:
+        yPoints.append(m * xVal + b)
+    plt.plot(x, yPoints, linestyle = 'dashed', color = 'blue')
+   
+    plt.show()
+
 
 def main():
     #load data from csv file
     points = np.genfromtxt('grades.csv', delimiter =',')
+    
 
     learningRate = .0001
     startingB = 0
     startingM = 0
-    numberIterations = 2000
+    numberIterations = 2000     
 
     print(f"starting gradient descent at b = {startingB}, m = {startingM}, error = {computeError(startingB, startingM, points)}")
     [b, m] = gradientDescent(points, startingB, startingM, learningRate, numberIterations)
     print(f"ending point at b = {b}, m = {m}, error = {computeError(b, m, points)}")
 
+
+    graph(points, m, b)
 
 
 if __name__ == '__main__':
